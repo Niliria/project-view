@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据地图 · Data Map</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🗺️</span>
+      <div>
+        <h1>数据地图</h1>
+        <p class="subtitle">数仓表元数据总览</p>
+      </div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat-item"><span class="stat-num" id="stat-total">-</span><span class="stat-label">表总数</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-projects">-</span><span class="stat-label">项目数</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-layers">-</span><span class="stat-label">数仓层级</span></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <input type="search" id="search" placeholder="🔍 搜索表名 / 中文名 / 数据域..." />
+      <select id="filter-project"><option value="">全部项目</option></select>
+      <select id="filter-layer"><option value="">全部层级</option></select>
+      <select id="filter-task"><option value="">全部任务类型</option></select>
+      <button id="btn-reset">重置</button>
+    </section>
+
+    <section class="layer-nav" id="layer-nav"></section>
+
+    <section class="table-wrap">
+      <div id="loading" class="loading">正在从 Supabase 加载数据...</div>
+      <div id="error" class="error" hidden></div>
+      <table id="data-table" hidden>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>项目名称</th>
+            <th>数仓层级</th>
+            <th>数据域</th>
+            <th>表中文名称</th>
+            <th>表英文名称</th>
+            <th>任务类型</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div id="empty" class="empty" hidden>没有匹配的数据</div>
+    </section>
+
+    <footer class="footer">
+      数据源：Supabase · <code>dw_tables</code>（演示数据） · 共 <span id="footer-count">0</span> 条
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"
+          integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o"
+          crossorigin="anonymous"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
