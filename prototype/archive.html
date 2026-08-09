@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lumen · 项目价值档案（首页原型）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #ffffff; }
+  body {
+    font-family: "Anthropic Sans", "Helvetica Neue", "PingFang SC", -apple-system, sans-serif;
+    color: #141413;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Anthropic Serif", Georgia, "Songti SC", serif; }
+  .mono { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+
+  /* ---------- 顶栏 ---------- */
+  .navbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 40px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e9e9e7;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; }
+  .brand img { width: 26px; height: 26px; border-radius: 7px; border: 1px solid #e9e9e7; object-fit: contain; }
+  .nav-sep { width: 1px; height: 18px; background: #e9e9e7; margin: 0 4px; }
+  .nav-title { font-size: 14px; color: #5e5d59; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .ghost-btn {
+    height: 34px; padding: 0 14px; font-size: 13px; color: #5e5d59;
+    background: #ffffff; border: 1px solid #e4e4e2; border-radius: 10px; cursor: pointer;
+  }
+  .ghost-btn:hover { background: #f5f5f4; }
+  .primary-btn {
+    height: 34px; padding: 0 16px; font-size: 13px; color: #ffffff;
+    background: #141413; border: none; border-radius: 10px; cursor: pointer;
+  }
+  .primary-btn:hover { background: #2a2a28; }
+
+  /* ---------- 主体 ---------- */
+  .page { max-width: 1160px; margin: 0 auto; padding: 36px 40px 80px; }
+
+  /* 项目切换 */
+  .proj-switch { display: inline-flex; gap: 4px; padding: 4px; background: #fafafa; border: 1px solid #e9e9e7; border-radius: 12px; }
+  .proj-item {
+    padding: 7px 16px; font-size: 13.5px; color: #5e5d59; border-radius: 9px; cursor: pointer; user-select: none;
+  }
+  .proj-item.active { background: #ffffff; color: #141413; font-weight: 600; border: 1px solid #e9e9e7; }
+
+  /* 档案头 */
+  .archive-head { margin-top: 26px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  .proj-name { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
+  .proj-tags { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 12.5px; color: #5e5d59; background: #fafafa;
+    border: 1px solid #e9e9e7; border-radius: 999px; padding: 4px 12px;
+  }
+
+  /* 统计卡 */
+  .stats { margin-top: 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .stat-card { background: #ffffff; border: 1px solid #e9e9e7; border-radius: 14px; padding: 18px 20px; }
+  .stat-num { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+  .stat-num small { font-size: 14px; color: #9b9a94; font-weight: 400; margin-left: 2px; }
+  .stat-label { margin-top: 4px; font-size: 12.5px; color: #9b9a94; }
+
+  /* Tab */
+  .tabs { margin-top: 34px; display: flex; gap: 26px; border-bottom: 1px solid #e9e9e7; }
+  .tab { padding: 10px 2px; font-size: 14.5px; color: #9b9a94; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; user-select: none; }
+  .tab.active { color: #141413; font-weight: 600; border-bottom-color: #141413; }
+
+  /* 通用卡片区块 */
+  .section { margin-top: 22px; }
+  .card { background: #ffffff; border: 1px solid #e9e9e7; border-radius: 16px; padding: 24px 26px; }
+  .card-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .card-sub { margin-top: 3px; font-size: 12.5px; color: #9b9a94; }
+  .auto-mark { font-size: 11px; color: #9b9a94; background: #fafafa; border: 1px solid #e9e9e7; border-radius: 999px; padding: 2px 8px; }
+
+  .two-col { display: grid; grid-template-columns: 1.55fr 1fr; gap: 14px; }
+
+  /* 叙事 */
+  .narrative { margin-top: 14px; font-size: 15px; line-height: 1.9; color: #3b3a37; }
+  .narrative b { color: #141413; font-weight: 600; }
+  .narrative .hl { color: #c15f3c; font-weight: 600; }
+
+  /* 雷达 */
+  .radar-wrap { display: flex; flex-direction: column; align-items: center; }
+  .radar-legend { margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; width: 100%; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #5e5d59; }
+  .legend-item .v { margin-left: auto; font-weight: 600; color: #141413; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; background: #141413; }
+
+  /* 热力矩阵 */
+  .matrix { margin-top: 16px; display: grid; grid-template-columns: 110px repeat(5, 1fr) 48px; gap: 6px; align-items: center; }
+  .mx-head { font-size: 12px; color: #9b9a94; text-align: center; font-weight: 600; }
+  .mx-domain { font-size: 13px; color: #3b3a37; }
+  .mx-cell {
+    height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 12.5px; color: #3b3a37;
+  }
+  .mx-cell.empty { border: 1px dashed #e9e9e7; color: #d6d5d0; }
+  .mx-total { font-size: 12.5px; color: #9b9a94; text-align: center; }
+  .t1 { background: #fafaf8; } .t2 { background: #f2f1ec; } .t3 { background: #e9e8e1; }
+  .t4 { background: #dcdacd; font-weight: 600; } .t5 { background: #cfcbbc; font-weight: 600; }
+  .mx-note { margin-top: 12px; font-size: 12px; color: #9b9a94; }
+
+  /* 词根 */
+  .roots { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .root-chip {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 6px 12px; border: 1px solid #e9e9e7; border-radius: 10px; background: #ffffff; font-size: 13px;
+  }
+  .root-chip .r { font-weight: 700; color: #141413; }
+  .root-chip .m { color: #9b9a94; font-size: 12px; }
+  .root-chip.shared { border-color: #c15f3c40; background: #f6e7df33; }
+  .root-chip.shared::after { content: "跨项目"; font-size: 10px; color: #c15f3c; margin-left: 4px; }
+
+  /* 合规 */
+  .compliance-row { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .c-item { display: grid; grid-template-columns: 170px 1fr 52px; align-items: center; gap: 12px; font-size: 13px; }
+  .c-name { color: #5e5d59; }
+  .c-bar { height: 6px; background: #f5f5f4; border-radius: 999px; overflow: hidden; }
+  .c-fill { height: 100%; background: #141413; border-radius: 999px; }
+  .c-fill.warn { background: #c15f3c; }
+  .c-val { text-align: right; font-weight: 600; }
+
+  /* 场景 */
+  .scenes { margin-top: 6px; }
+  .scene-item { display: flex; gap: 16px; padding: 15px 0; border-bottom: 1px solid #f0f0ee; align-items: baseline; }
+  .scene-item:last-child { border-bottom: none; padding-bottom: 2px; }
+  .scene-table { font-size: 13px; color: #3b3a37; min-width: 230px; }
+  .scene-desc { font-size: 13.5px; color: #5e5d59; line-height: 1.6; }
+  .scene-desc b { color: #141413; }
+
+  /* 明细表 */
+  .detail-toolbar { margin-top: 16px; display: flex; gap: 10px; }
+  .detail-toolbar input, .detail-toolbar select {
+    height: 36px; padding: 0 12px; font-size: 13px; color: #141413;
+    border: 1px solid #e4e4e2; border-radius: 10px; background: #ffffff; outline: none;
+  }
+  .detail-toolbar input { width: 260px; }
+  .detail-toolbar input:focus, .detail-toolbar select:focus { border-color: #409eff; }
+  table.detail { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 13px; }
+  table.detail th { text-align: left; padding: 10px 12px; color: #9b9a94; font-weight: 600; font-size: 12px; background: #fafafa; border-bottom: 1px solid #e9e9e7; }
+  table.detail td { padding: 11px 12px; border-bottom: 1px solid #f0f0ee; color: #3b3a37; }
+  table.detail tr:hover td { background: #fafafa; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge-ODS { background: #efede5; color: #6e6a5e; }
+  .badge-DWD { background: #e5efe7; color: #3e6b4f; }
+  .badge-DWS { background: #e5ecf3; color: #3d5a80; }
+  .badge-DIM { background: #ece7f2; color: #6b5b8e; }
+  .badge-ADS { background: #f6e7df; color: #c15f3c; }
+
+  .foot-note { margin-top: 40px; text-align: center; font-size: 12px; color: #9b9a94; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- 顶栏 -->
+<header class="navbar">
+  <div class="brand"><img src="../public/logo.png" alt="Lumen" />Lumen</div>
+  <div class="nav-sep"></div>
+  <span class="nav-title">项目价值档案</span>
+  <div class="nav-right">
+    <button class="ghost-btn">✎ 编辑项目画像</button>
+    <button class="primary-btn">导出价值报告 .md</button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- 项目切换 -->
+  <div class="proj-switch" id="projSwitch">
+    <div class="proj-item active" data-proj="pipe">国家管网计量诊断项目</div>
+    <div class="proj-item" data-proj="gas">城市燃气供销差治理项目</div>
+  </div>
+
+  <!-- 档案头 -->
+  <div class="archive-head">
+    <div>
+      <h1 class="proj-name serif" id="projName">国家管网计量诊断项目</h1>
+      <div class="proj-tags" id="projTags"></div>
+    </div>
+  </div>
+
+  <!-- 统计卡 -->
+  <div class="stats" id="statCards"></div>
+
+  <!-- Tab -->
+  <div class="tabs">
+    <div class="tab active" data-tab="archive">价值档案</div>
+    <div class="tab" data-tab="detail">表清单明细</div>
+  </div>
+
+  <!-- ====== Tab 1：价值档案 ====== -->
+  <div id="pane-archive">
+
+    <!-- 价值叙事 + 雷达 -->
+    <div class="section two-col">
+      <div class="card">
+        <div class="card-title">价值叙事 <span class="auto-mark">由元数据自动生成</span></div>
+        <div class="card-sub">把"做了什么表"翻译成"交付了什么价值"，可直接用于汇报</div>
+        <p class="narrative" id="narrative"></p>
+      </div>
+      <div class="card radar-wrap">
+        <div class="card-title" style="align-self:flex-start">五维价值雷达</div>
+        <svg width="250" height="210" viewBox="0 0 200 190" style="margin-top:4px">
+          <g fill="none" stroke="#e9e9e7" stroke-width="1">
+            <polygon points="100,80 119,93.8 111.8,116.2 88.2,116.2 81,93.8" />
+            <polygon points="100,60 138,87.7 123.5,132.4 76.5,132.4 61.9,87.7" />
+            <polygon points="100,40 157.1,81.5 135.3,148.5 64.8,148.5 42.9,81.5" />
+            <polygon points="100,20 176.1,75.3 147,164.7 53,164.7 23.9,75.3" />
+          </g>
+          <g stroke="#f0f0ee" stroke-width="1">
+            <line x1="100" y1="100" x2="100" y2="20" />
+            <line x1="100" y1="100" x2="176.1" y2="75.3" />
+            <line x1="100" y1="100" x2="147" y2="164.7" />
+            <line x1="100" y1="100" x2="53" y2="164.7" />
+            <line x1="100" y1="100" x2="23.9" y2="75.3" />
+          </g>
+          <polygon id="radarPoly" fill="rgba(20,20,19,0.08)" stroke="#141413" stroke-width="1.5" stroke-linejoin="round" />
+          <g font-size="8.5" fill="#9b9a94">
+            <text x="100" y="12" text-anchor="middle">规模</text>
+            <text x="184" y="76" text-anchor="start">架构</text>
+            <text x="151" y="174" text-anchor="start">覆盖</text>
+            <text x="49" y="174" text-anchor="end">标准化</text>
+            <text x="16" y="76" text-anchor="end">应用化</text>
+          </g>
+        </svg>
+        <div class="radar-legend" id="radarLegend"></div>
+      </div>
+    </div>
+
+    <!-- 架构热力 -->
+    <div class="section card">
+      <div class="card-title">数仓架构全景 <span class="auto-mark">自动推导</span></div>
+      <div class="card-sub">数据域 × 分层 矩阵：一眼看出架构是否均衡、哪些域还是"空心"的</div>
+      <div class="matrix" id="matrix"></div>
+      <div class="mx-note">颜色越深代表该交叉点的表越多；虚线格表示尚未建设。</div>
+    </div>
+
+    <!-- 词根 + 合规 -->
+    <div class="section two-col">
+      <div class="card">
+        <div class="card-title">词根资产库 <span class="auto-mark">自动解析 · 可跨项目复用</span></div>
+        <div class="card-sub">从表名解析出的标准词根，是带到下一个项目去的"资产"</div>
+        <div class="roots" id="roots"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">命名合规检查 <span class="auto-mark">自动检查</span></div>
+        <div class="card-sub">对照数仓命名规范的逐项得分</div>
+        <div class="compliance-row" id="compliance"></div>
+      </div>
+    </div>
+
+    <!-- 产出与场景 -->
+    <div class="section card">
+      <div class="card-title">产出与业务场景 <span class="auto-mark">ADS 自动挂载 · 场景人工一句话</span></div>
+      <div class="card-sub">每一张 ADS 应用表背后，是一个可以讲给客户听的故事</div>
+      <div class="scenes" id="scenes"></div>
+    </div>
+  </div>
+
+  <!-- ====== Tab 2：表清单明细 ====== -->
+  <div id="pane-detail" class="hidden">
+    <div class="section card">
+      <div class="detail-toolbar">
+        <input placeholder="搜索表名…" disabled />
+        <select disabled><option>全部分层</option></select>
+        <select disabled><option>全部数据域</option></select>
+      </div>
+      <table class="detail">
+        <thead>
+          <tr><th>分层</th><th>数据域</th><th>英文表名</th><th>中文名称</th><th>任务类型</th></tr>
+        </thead>
+        <tbody id="detailBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="foot-note">静态原型 · 数据为演示样例 · Lumen「交付价值引擎」首页概念稿</p>
+</main>
+
+<script>
+/* ---------------- 示例数据 ---------------- */
+const DATA = {
+  pipe: {
+    name: '国家管网计量诊断项目',
+    tags: ['能源 · 油气管网', '客户：国家管网集团', '平台：Dataphin', '交付周期：8 个月'],
+    stats: [
+      { num: '50', label: '数仓表总数' },
+      { num: '5', label: '分层覆盖', small: '/ 5' },
+      { num: '9', label: '数据域' },
+      { num: '45', label: '沉淀词根' },
+      { num: '92', label: '命名合规率', small: '%' },
+    ],
+    narrative: '本项目服务于<b>能源管网行业</b>的计量诊断业务，面向国家管网集团的计量交接与损耗治理场景。数仓采用 <b>ODS → DWD → DWS → DIM → ADS 五层标准架构</b>，覆盖<b>计量、客户、结算</b>等 9 大数据域，共交付 <span class="hl">50 张模型表</span>；其中 <span class="hl">6 张 ADS 应用表</span>直接支撑计量异常诊断、日度输差分析等一线业务场景。命名合规率 <b>92%</b>，沉淀可复用词根 <b>45 个</b>，其中 12 个已在其他项目验证通用。',
+    radar: { 规模: 85, 架构: 90, 覆盖: 78, 标准化: 92, 应用化: 70 },
+    domains: ['计量域', '客户域', '设备域', '结算域', '工单域', '运行域', '安全域', '组织域', '公共域'],
+    /* 行=域，列=[ODS,DWD,DWS,DIM,ADS] */
+    matrix: [
+      [6, 4, 1, 0, 1], [4, 2, 1, 1, 0], [3, 2, 1, 1, 0],
+      [3, 2, 1, 0, 0], [2, 2, 1, 0, 0], [3, 1, 1, 0, 1],
+      [2, 1, 0, 0, 1], [1, 1, 0, 1, 0], [2, 2, 1, 1, 3],
+    ],
+    roots: [
+      ['diag', '诊断'], ['cust', '客户'], ['mtr', '计量表'], ['amt', '金额'],
+      ['bal', '平衡/输差'], ['setl', '结算'], ['dev', '设备'], ['ord', '工单'],
+      ['sum', '汇总'], ['df', '日全量'], ['his', '历史'], ['stat', '统计'],
+    ],
+    compliance: [
+      ['分层前缀规范', 98], ['小写下划线格式', 100], ['词根命中率', 88],
+      ['业务过程后缀（df/inc）', 94], ['跨项目词根复用', 27, true],
+    ],
+    scenes: [
+      ['ads_diagnosis_summary_df', '<b>计量异常诊断日报</b>：每日自动定位输差超阈值站点，诊断时效从 3 天缩短至 2 小时'],
+      ['ads_bal_analysis_df', '<b>日度输差分析</b>：支撑购销差考核，月度输差率下降 0.4 个百分点'],
+      ['ads_mtr_health_df', '<b>计量表健康度画像</b>：为 2.3 万台计量设备建立运行状态分级'],
+    ],
+    tables: [
+      ['ODS', '计量域', 'ods_mtr_reading_df', '计量表读数日全量', 'SQL'],
+      ['ODS', '客户域', 'ods_cust_info_df', '客户信息日全量', 'SQL'],
+      ['DWD', '计量域', 'dwd_mtr_diag_detail_df', '计量诊断明细', 'SQL'],
+      ['DWD', '结算域', 'dwd_setl_bill_detail_df', '结算账单明细', 'SQL'],
+      ['DWS', '计量域', 'dws_mtr_diag_stat_df', '计量诊断统计日汇总', 'SQL'],
+      ['DIM', '公共域', 'dim_date', '日期维表', 'SQL'],
+      ['DIM', '设备域', 'dim_dev_mtr', '计量设备维表', 'SQL'],
+      ['ADS', '计量域', 'ads_diagnosis_summary_df', '计量诊断汇总', 'Python脚本'],
+      ['ADS', '运行域', 'ads_bal_analysis_df', '输差分析', 'SQL'],
+      ['ADS', '设备域', 'ads_mtr_health_df', '计量表健康度', 'SQL'],
+    ],
+  },
+  gas: {
+    name: '城市燃气供销差治理项目',
+    tags: ['公用事业 · 城市燃气', '客户：某省级燃气集团', '平台：DTStack', '交付周期：5 个月'],
+    stats: [
+      { num: '32', label: '数仓表总数' },
+      { num: '5', label: '分层覆盖', small: '/ 5' },
+      { num: '6', label: '数据域' },
+      { num: '28', label: '沉淀词根' },
+      { num: '87', label: '命名合规率', small: '%' },
+    ],
+    narrative: '本项目服务于<b>公用事业行业</b>的供销差治理业务，面向城市燃气企业的购、销、存全链路损耗管控。数仓采用<b>五层标准架构</b>，覆盖<b>购销、计量、客户</b>等 6 大数据域，共交付 <span class="hl">32 张模型表</span>；其中 <span class="hl">4 张 ADS 应用表</span>直接支撑供销差归因与抄表质量管理。复用上一项目词根 <b>12 个</b>，建模启动时间缩短约一半。',
+    radar: { 规模: 55, 架构: 88, 覆盖: 62, 标准化: 87, 应用化: 72 },
+    domains: ['购销域', '计量域', '客户域', '设备域', '安全域', '公共域'],
+    matrix: [
+      [5, 3, 1, 0, 1], [4, 2, 1, 0, 1], [3, 2, 1, 0, 0],
+      [2, 2, 0, 1, 0], [2, 1, 0, 0, 1], [2, 1, 1, 1, 1],
+    ],
+    roots: [
+      ['pur', '采购'], ['sale', '销售'], ['inv', '库存'], ['cust', '客户'],
+      ['mtr', '计量表'], ['bal', '平衡/输差'], ['df', '日全量'], ['stat', '统计'],
+    ],
+    compliance: [
+      ['分层前缀规范', 95], ['小写下划线格式', 100], ['词根命中率', 82],
+      ['业务过程后缀（df/inc）', 90], ['跨项目词根复用', 43, true],
+    ],
+    scenes: [
+      ['ads_bal_reason_df', '<b>供销差归因分析</b>：将月度输差拆解到片区与原因类别，定位周期从 2 周降至 2 天'],
+      ['ads_meter_read_quality_df', '<b>抄表质量监控</b>：识别异常抄表行为，估抄率下降 60%'],
+      ['ads_pur_sale_report_df', '<b>购销存日报</b>：替代人工台账，每日节省统计工时约 3 人时'],
+    ],
+    tables: [
+      ['ODS', '购销域', 'ods_pur_contract_df', '采购合同日全量', 'SQL'],
+      ['ODS', '计量域', 'ods_mtr_reading_df', '表具读数日全量', 'SQL'],
+      ['DWD', '购销域', 'dwd_sale_order_detail_df', '销售订单明细', 'SQL'],
+      ['DWS', '购销域', 'dws_bal_stat_df', '输差统计日汇总', 'SQL'],
+      ['DIM', '客户域', 'dim_cust_gas', '燃气客户维表', 'SQL'],
+      ['ADS', '购销域', 'ads_bal_reason_df', '供销差归因', 'SQL'],
+      ['ADS', '计量域', 'ads_meter_read_quality_df', '抄表质量监控', 'Python脚本'],
+      ['ADS', '购销域', 'ads_pur_sale_report_df', '购销存日报', 'SQL'],
+    ],
+  },
+};
+
+/* ---------------- 渲染 ---------------- */
+const RADAR_DIMS = ['规模', '架构', '覆盖', '标准化', '应用化'];
+function radarPoint(idx, score) {
+  const r = score * 0.8; // 满分100 -> 半径80
+  const ang = (-90 + idx * 72) * Math.PI / 180;
+  return [100 + r * Math.cos(ang), 100 + r * Math.sin(ang)];
+}
+
+function render(projKey) {
+  const d = DATA[projKey];
+  document.getElementById('projName').textContent = d.name;
+  document.getElementById('projTags').innerHTML =
+    d.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+  document.getElementById('statCards').innerHTML = d.stats.map(s => `
+    <div class="stat-card">
+      <div class="stat-num">${s.num}${s.small ? `<small>${s.small}</small>` : ''}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>`).join('');
+
+  document.getElementById('narrative').innerHTML = d.narrative;
+
+  /* 雷达 */
+  const pts = RADAR_DIMS.map((k, i) => radarPoint(i, d.radar[k]).map(v => v.toFixed(1)).join(','));
+  document.getElementById('radarPoly').setAttribute('points', pts.join(' '));
+  document.getElementById('radarLegend').innerHTML = RADAR_DIMS.map(k => `
+    <div class="legend-item"><span class="legend-dot"></span>${k}<span class="v">${d.radar[k]}</span></div>`).join('');
+
+  /* 热力矩阵 */
+  const LAYERS = ['ODS', 'DWD', 'DWS', 'DIM', 'ADS'];
+  let mx = '<div class="mx-head" style="text-align:left"></div>' +
+    LAYERS.map(l => `<div class="mx-head">${l}</div>`).join('') + '<div></div>';
+  d.domains.forEach((dom, i) => {
+    const row = d.matrix[i];
+    const total = row.reduce((a, b) => a + b, 0);
+    mx += `<div class="mx-domain">${dom}</div>`;
+    row.forEach(n => {
+      const cls = n === 0 ? 'empty' : 't' + Math.min(5, n);
+      mx += `<div class="mx-cell ${cls}">${n || '·'}</div>`;
+    });
+    mx += `<div class="mx-total">${total}</div>`;
+  });
+  const colTotals = LAYERS.map((_, c) => d.matrix.reduce((a, r) => a + r[c], 0));
+  mx += '<div class="mx-head" style="text-align:left">合计</div>' +
+    colTotals.map(n => `<div class="mx-head">${n}</div>`).join('') +
+    `<div class="mx-total" style="font-weight:600">${colTotals.reduce((a, b) => a + b, 0)}</div>`;
+  document.getElementById('matrix').innerHTML = mx;
+
+  /* 词根 */
+  document.getElementById('roots').innerHTML = d.roots.map(([r, m]) => {
+    const shared = ['cust', 'mtr', 'bal', 'df', 'stat'].includes(r) && projKey === 'gas';
+    return `<span class="root-chip ${shared ? 'shared' : ''}"><span class="r mono">${r}</span><span class="m">${m}</span></span>`;
+  }).join('');
+
+  /* 合规 */
+  document.getElementById('compliance').innerHTML = d.compliance.map(([name, v, warn]) => `
+    <div class="c-item">
+      <span class="c-name">${name}</span>
+      <div class="c-bar"><div class="c-fill ${v < 50 ? 'warn' : ''}" style="width:${v}%"></div></div>
+      <span class="c-val">${v}%</span>
+    </div>`).join('');
+
+  /* 场景 */
+  document.getElementById('scenes').innerHTML = d.scenes.map(([t, desc]) => `
+    <div class="scene-item">
+      <span class="scene-table mono">${t}</span>
+      <span class="scene-desc">${desc}</span>
+    </div>`).join('');
+
+  /* 明细表 */
+  document.getElementById('detailBody').innerHTML = d.tables.map(r => `
+    <tr>
+      <td><span class="badge badge-${r[0]}">${r[0]}</span></td>
+      <td>${r[1]}</td><td class="mono">${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td>
+    </tr>`).join('');
+}
+
+/* 项目切换 */
+document.getElementById('projSwitch').addEventListener('click', e => {
+  const item = e.target.closest('.proj-item');
+  if (!item) return;
+  document.querySelectorAll('.proj-item').forEach(el => el.classList.remove('active'));
+  item.classList.add('active');
+  render(item.dataset.proj);
+});
+
+/* Tab 切换 */
+document.querySelector('.tabs').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('pane-archive').classList.toggle('hidden', tab.dataset.tab !== 'archive');
+  document.getElementById('pane-detail').classList.toggle('hidden', tab.dataset.tab !== 'detail');
+});
+
+render('pipe');
+</script>
+</body>
+</html>
