@@ -1,0 +1,22 @@
+{
+  "name": "project-view",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "数据地图 · Vue 3 + Vite + Element Plus + Supabase",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "element-plus": "^2.9.3",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.7"
+  }
+}

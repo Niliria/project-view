@@ -1,0 +1,63 @@
+/* Apple 官网风格全局样式 */
+:root {
+  /* 配色 */
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --bg: #f5f5f7;
+  --bg-elevated: rgba(255, 255, 255, 0.72);
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+
+  /* 圆角与阴影 */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+
+  /* Element Plus 主题覆盖（Apple 蓝） */
+  --el-color-primary: #0071e3;
+  --el-color-primary-light-3: #338de9;
+  --el-color-primary-light-5: #66aaee;
+  --el-color-primary-light-7: #99c7f4;
+  --el-color-primary-light-8: #b3d5f7;
+  --el-color-primary-light-9: #e6f1fc;
+  --el-color-primary-dark-2: #005bb6;
+  --el-border-radius-base: 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 路由切换过渡 */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
