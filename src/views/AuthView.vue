@@ -90,7 +90,7 @@ async function handleLogin() {
       return
     }
     ElMessage.success('登录成功，欢迎回来')
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/map'
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     await router.push(redirect)
   } finally {
     loading.value = false

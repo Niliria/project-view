@@ -4,7 +4,12 @@ import { supabase } from '@/lib/supabase'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: '/map' },
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('@/views/HomeView.vue'),
+      meta: { requiresAuth: true },
+    },
     {
       path: '/login',
       name: 'login',
@@ -30,7 +35,7 @@ router.beforeEach(async (to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
   if (to.meta.guestOnly && session) {
-    return { name: 'map' }
+    return { path: '/' }
   }
 })
 
