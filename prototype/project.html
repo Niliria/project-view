@@ -12,7 +12,6 @@
     color: #141413;
     -webkit-font-smoothing: antialiased;
   }
-  .serif { font-family: "Anthropic Serif", Georgia, "Songti SC", serif; }
   .mono { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
 
   /* ---------- 顶栏 ---------- */
@@ -20,9 +19,10 @@
     position: sticky; top: 0; z-index: 10;
     display: flex; align-items: center; gap: 12px;
     padding: 14px 40px;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid #e9e9e7;
+    background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.98) 100%);
+    backdrop-filter: blur(12px) saturate(120%);
+    border-bottom: 1px solid rgba(233,233,231,0.6);
+    box-shadow: 0 1px 0 rgba(233,233,231,0.3);
   }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; }
   .brand img { width: 26px; height: 26px; border-radius: 7px; border: 1px solid #e9e9e7; object-fit: contain; }
@@ -82,7 +82,7 @@
   .picker-option.selected { color: #141413; font-weight: 600; }
   .picker-option.selected::after { content: "✓"; margin-left: auto; font-size: 12px; color: #141413; }
 
-  /* 档案头：标签与下拉框同行，自适应换行 */
+  /* 标签与下拉框同行 */
   .proj-tags { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
   .tag {
     font-size: 12.5px; color: #5e5d59; background: #fafafa;
@@ -91,102 +91,116 @@
 
   /* 统计卡 */
   .stats { margin-top: 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
-  .stat-card { background: #ffffff; border: 1px solid #e9e9e7; border-radius: 14px; padding: 18px 20px; }
+  .stat-card { 
+    background: #ffffff; 
+    border: 1px solid #e9e9e7; 
+    border-radius: 14px; 
+    padding: 18px 20px;
+    transition: border-color .15s, transform .3s ease, box-shadow .3s ease;
+    box-shadow: 0 1px 0 rgba(233,233,231,0.4);
+  }
+  .stat-card:hover { 
+    border-color: #c9c8c3; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(20,20,19,0.06);
+  }
   .stat-num { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
   .stat-num small { font-size: 14px; color: #9b9a94; font-weight: 400; margin-left: 2px; }
   .stat-label { margin-top: 4px; font-size: 12.5px; color: #9b9a94; }
 
-  /* Tab */
-  .tabs { margin-top: 34px; display: flex; gap: 26px; border-bottom: 1px solid #e9e9e7; }
-  .tab { padding: 10px 2px; font-size: 14.5px; color: #9b9a94; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; user-select: none; }
-  .tab.active { color: #141413; font-weight: 600; border-bottom-color: #141413; }
+  /* Tab（七大分页） */
+  .tabs { margin-top: 34px; display: flex; gap: 44px; border-bottom: 1px solid #e9e9e7; flex-wrap: wrap; }
+  .tab { padding: 10px 2px; font-size: 14.5px; color: #9b9a94; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; user-select: none; white-space: nowrap; }
+  .tab.active { 
+    color: #141413; 
+    font-weight: 600; 
+    border-bottom-color: #141413;
+    position: relative;
+  }
+  .tab.active::after {
+    content: "";
+    position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #141413, transparent);
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .tab.active:hover::after { opacity: 1; }
 
   /* 通用卡片区块 */
   .section { margin-top: 22px; }
-  .card { background: #ffffff; border: 1px solid #e9e9e7; border-radius: 16px; padding: 24px 26px; }
+  .card { 
+    background: #ffffff; 
+    border: 1px solid #e9e9e7; 
+    border-radius: 16px; 
+    padding: 24px 26px;
+    box-shadow: 0 1px 0 rgba(233,233,231,0.3);
+    transition: box-shadow .25s ease, transform .25s ease;
+  }
+  .card + .card { margin-top: 14px; }
+  .card:hover {
+    box-shadow: 0 2px 8px rgba(20,20,19,0.04);
+    transform: translateY(-1px);
+  }
   .card-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .card-sub { margin-top: 3px; font-size: 12.5px; color: #9b9a94; }
-  .auto-mark { font-size: 11px; color: #9b9a94; background: #fafafa; border: 1px solid #e9e9e7; border-radius: 999px; padding: 2px 8px; }
 
-  .two-col { display: grid; grid-template-columns: 1.55fr 1fr; gap: 14px; }
-
-  /* 叙事 */
-  .narrative { margin-top: 14px; font-size: 15px; line-height: 1.9; color: #3b3a37; }
-  .narrative b { color: #141413; font-weight: 600; }
-  .narrative .hl { color: #c15f3c; font-weight: 600; }
-
-  /* 雷达 */
-  .radar-wrap { display: flex; flex-direction: column; align-items: center; }
-  .radar-legend { margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; width: 100%; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #5e5d59; }
-  .legend-item .v { margin-left: auto; font-weight: 600; color: #141413; }
-  .legend-dot { width: 7px; height: 7px; border-radius: 50%; background: #141413; }
-
-  /* 热力矩阵 */
-  .matrix { margin-top: 16px; display: grid; grid-template-columns: 110px repeat(5, 1fr) 48px; gap: 6px; align-items: center; }
-  .mx-head { font-size: 12px; color: #9b9a94; text-align: center; font-weight: 600; }
-  .mx-domain { font-size: 13px; color: #3b3a37; }
-  .mx-cell {
-    height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    font-size: 12.5px; color: #3b3a37;
+  /* 文本卡（项目全景）：纵向排列 */
+  .three-col { margin-top: 22px; }
+  .prose { margin-top: 12px; font-size: 13.5px; line-height: 1.85; color: #3b3a37; }
+  .prose b {
+    color: #141413;
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(20,20,19,0.05);
   }
-  .mx-cell.empty { border: 1px dashed #e9e9e7; color: #d6d5d0; }
-  .mx-total { font-size: 12.5px; color: #9b9a94; text-align: center; }
-  .t1 { background: #fafaf8; } .t2 { background: #f2f1ec; } .t3 { background: #e9e8e1; }
-  .t4 { background: #dcdacd; font-weight: 600; } .t5 { background: #cfcbbc; font-weight: 600; }
-  .mx-note { margin-top: 12px; font-size: 12px; color: #9b9a94; }
 
-  /* 词根 */
-  .roots { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .root-chip {
-    display: inline-flex; align-items: baseline; gap: 6px;
-    padding: 6px 12px; border: 1px solid #e9e9e7; border-radius: 10px; background: #ffffff; font-size: 13px;
+  /* 流程图（架构设计） */
+  .flow { margin-top: 18px; display: flex; align-items: stretch; }
+  .flow + .flow { margin-top: 12px; }
+  .flow-label {
+    flex: none; width: 84px; display: flex; align-items: center;
+    font-size: 12.5px; font-weight: 600; color: #9b9a94;
   }
-  .root-chip .r { font-weight: 700; color: #141413; }
-  .root-chip .m { color: #9b9a94; font-size: 12px; }
-  .root-chip.shared { border-color: #c15f3c40; background: #f6e7df33; }
-  .root-chip.shared::after { content: "跨项目"; font-size: 10px; color: #c15f3c; margin-left: 4px; }
-
-  /* 合规 */
-  .compliance-row { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
-  .c-item { display: grid; grid-template-columns: 170px 1fr 52px; align-items: center; gap: 12px; font-size: 13px; }
-  .c-name { color: #5e5d59; }
-  .c-bar { height: 6px; background: #f5f5f4; border-radius: 999px; overflow: hidden; }
-  .c-fill { height: 100%; background: #141413; border-radius: 999px; }
-  .c-fill.warn { background: #c15f3c; }
-  .c-val { text-align: right; font-weight: 600; }
-
-  /* 场景 */
-  .scenes { margin-top: 6px; }
-  .scene-item { display: flex; gap: 16px; padding: 15px 0; border-bottom: 1px solid #f0f0ee; align-items: baseline; }
-  .scene-item:last-child { border-bottom: none; padding-bottom: 2px; }
-  .scene-table { font-size: 13px; color: #3b3a37; min-width: 230px; }
-  .scene-desc { font-size: 13.5px; color: #5e5d59; line-height: 1.6; }
-  .scene-desc b { color: #141413; }
+  .flow-row { flex: 1; display: flex; align-items: stretch; flex-wrap: wrap; gap: 10px; }
+  .flow-node {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    padding: 10px 16px; background: #fafafa; border: 1px solid #e9e9e7; border-radius: 10px;
+    font-size: 13px; font-weight: 600; color: #141413;
+    transition: box-shadow .2s ease;
+    text-shadow: 0 0 1px rgba(20,20,19,0.03);
+  }
+  .flow-node:hover {
+    box-shadow: 0 2px 6px rgba(20,20,19,0.06);
+  }
+  .flow-node small { font-size: 10.5px; font-weight: 400; color: #9b9a94; }
+  .flow-node.l-ods { background: #efede5; border-color: #e2dfd3; color: #6e6a5e; }
+  .flow-node.l-dwd { background: #e5efe7; border-color: #d3e2d8; color: #3e6b4f; }
+  .flow-node.l-dws { background: #e5ecf3; border-color: #d2dde9; color: #3d5a80; }
+  .flow-node.l-dim { background: #ece7f2; border-color: #ddd5e9; color: #6b5b8e; }
+  .flow-node.l-ads { background: #f6e7df; border-color: #ecd6c9; color: #c15f3c; }
+  .flow-arrow { display: flex; align-items: center; color: #c9c8c3; font-size: 14px; }
 
   /* 明细表 */
-  .detail-toolbar { margin-top: 16px; display: flex; gap: 10px; }
-  .detail-toolbar input, .detail-toolbar select {
-    height: 36px; padding: 0 12px; font-size: 13px; color: #141413;
-    border: 1px solid #e4e4e2; border-radius: 10px; background: #ffffff; outline: none;
-  }
-  .detail-toolbar input { width: 260px; }
-  .detail-toolbar input:focus, .detail-toolbar select:focus { border-color: #409eff; }
   table.detail { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 13px; }
   table.detail th { text-align: left; padding: 10px 12px; color: #9b9a94; font-weight: 600; font-size: 12px; background: #fafafa; border-bottom: 1px solid #e9e9e7; }
   table.detail td { padding: 11px 12px; border-bottom: 1px solid #f0f0ee; color: #3b3a37; }
   table.detail tr:hover td { background: #fafafa; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
   .badge-ODS { background: #efede5; color: #6e6a5e; }
   .badge-DWD { background: #e5efe7; color: #3e6b4f; }
   .badge-DWS { background: #e5ecf3; color: #3d5a80; }
   .badge-DIM { background: #ece7f2; color: #6b5b8e; }
   .badge-ADS { background: #f6e7df; color: #c15f3c; }
+  .badge-atom { background: #e5efe7; color: #3e6b4f; }
+  .badge-derive { background: #e5ecf3; color: #3d5a80; }
+  .dot-yes { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3e6b4f; }
 
   .hidden { display: none; }
 </style>
 </head>
 <body>
+  <!-- 科技背景纹理 -->
+  <div style="position:fixed; top:0; left:0; right:0; height:160px; background:linear-gradient(180deg, rgba(235,238,243,0.3) 0%, rgba(255,255,255,0) 100%); z-index:-1;"></div>
 
 <!-- 顶栏 -->
 <header class="navbar">
@@ -218,94 +232,123 @@
   <!-- 统计卡 -->
   <div class="stats" id="statCards"></div>
 
-  <!-- Tab -->
+  <!-- 八大分页 -->
   <div class="tabs">
-    <div class="tab active" data-tab="archive">价值档案</div>
-    <div class="tab" data-tab="detail">表清单明细</div>
+    <div class="tab active" data-tab="overview">项目全景</div>
+    <div class="tab" data-tab="arch">架构设计</div>
+    <div class="tab" data-tab="build">建设规范</div>
+    <div class="tab" data-tab="busmatrix">总线矩阵</div>
+    <div class="tab" data-tab="model">模型设计清单</div>
+    <div class="tab" data-tab="domain">数据域</div>
+    <div class="tab" data-tab="standard">数据标准</div>
+    <div class="tab" data-tab="metric">指标建设</div>
+    <div class="tab" data-tab="system">系统接入</div>
   </div>
 
-  <!-- ====== Tab 1：价值档案 ====== -->
-  <div id="pane-archive">
-
-    <!-- 价值叙事 + 雷达 -->
-    <div class="section two-col">
+  <!-- ====== 1. 项目全景 ====== -->
+  <div id="pane-overview">
+    <div class="three-col">
       <div class="card">
-        <div class="card-title">价值叙事 <span class="auto-mark">由元数据自动生成</span></div>
-        <div class="card-sub">把"做了什么表"翻译成"交付了什么价值"，可直接用于汇报</div>
-        <p class="narrative" id="narrative"></p>
-      </div>
-      <div class="card radar-wrap">
-        <div class="card-title" style="align-self:flex-start">五维价值雷达</div>
-        <svg width="250" height="210" viewBox="0 0 200 190" style="margin-top:4px">
-          <g fill="none" stroke="#e9e9e7" stroke-width="1">
-            <polygon points="100,80 119,93.8 111.8,116.2 88.2,116.2 81,93.8" />
-            <polygon points="100,60 138,87.7 123.5,132.4 76.5,132.4 61.9,87.7" />
-            <polygon points="100,40 157.1,81.5 135.3,148.5 64.8,148.5 42.9,81.5" />
-            <polygon points="100,20 176.1,75.3 147,164.7 53,164.7 23.9,75.3" />
-          </g>
-          <g stroke="#f0f0ee" stroke-width="1">
-            <line x1="100" y1="100" x2="100" y2="20" />
-            <line x1="100" y1="100" x2="176.1" y2="75.3" />
-            <line x1="100" y1="100" x2="147" y2="164.7" />
-            <line x1="100" y1="100" x2="53" y2="164.7" />
-            <line x1="100" y1="100" x2="23.9" y2="75.3" />
-          </g>
-          <polygon id="radarPoly" fill="rgba(20,20,19,0.08)" stroke="#141413" stroke-width="1.5" stroke-linejoin="round" />
-          <g font-size="8.5" fill="#9b9a94">
-            <text x="100" y="12" text-anchor="middle">规模</text>
-            <text x="184" y="76" text-anchor="start">架构</text>
-            <text x="151" y="174" text-anchor="start">覆盖</text>
-            <text x="49" y="174" text-anchor="end">标准化</text>
-            <text x="16" y="76" text-anchor="end">应用化</text>
-          </g>
-        </svg>
-        <div class="radar-legend" id="radarLegend"></div>
-      </div>
-    </div>
-
-    <!-- 架构热力 -->
-    <div class="section card">
-      <div class="card-title">数仓架构全景 <span class="auto-mark">自动推导</span></div>
-      <div class="card-sub">数据域 × 分层 矩阵：一眼看出架构是否均衡、哪些域还是"空心"的</div>
-      <div class="matrix" id="matrix"></div>
-      <div class="mx-note">颜色越深代表该交叉点的表越多；虚线格表示尚未建设。</div>
-    </div>
-
-    <!-- 词根 + 合规 -->
-    <div class="section two-col">
-      <div class="card">
-        <div class="card-title">词根资产库 <span class="auto-mark">自动解析 · 可跨项目复用</span></div>
-        <div class="card-sub">从表名解析出的标准词根，是带到下一个项目去的"资产"</div>
-        <div class="roots" id="roots"></div>
+        <div class="card-title">1.1 项目背景</div>
+        <p class="prose" id="ovBackground"></p>
       </div>
       <div class="card">
-        <div class="card-title">命名合规检查 <span class="auto-mark">自动检查</span></div>
-        <div class="card-sub">对照数仓命名规范的逐项得分</div>
-        <div class="compliance-row" id="compliance"></div>
+        <div class="card-title">1.2 核心需求</div>
+        <p class="prose" id="ovRequirements"></p>
       </div>
-    </div>
-
-    <!-- 产出与场景 -->
-    <div class="section card">
-      <div class="card-title">产出与业务场景 <span class="auto-mark">ADS 自动挂载 · 场景人工一句话</span></div>
-      <div class="card-sub">每一张 ADS 应用表背后，是一个可以讲给客户听的故事</div>
-      <div class="scenes" id="scenes"></div>
+      <div class="card">
+        <div class="card-title">1.3 项目价值</div>
+        <p class="prose" id="ovValue"></p>
+      </div>
     </div>
   </div>
 
-  <!-- ====== Tab 2：表清单明细 ====== -->
-  <div id="pane-detail" class="hidden">
+  <!-- ====== 2. 架构设计 ====== -->
+  <div id="pane-arch" class="hidden">
     <div class="section card">
-      <div class="detail-toolbar">
-        <input placeholder="搜索表名…" disabled />
-        <select disabled><option>全部分层</option></select>
-        <select disabled><option>全部数据域</option></select>
-      </div>
+      <div class="card-title">2.1 技术架构</div>
+      <div class="card-sub">数据从源系统到应用的流转链路</div>
+      <div id="techFlow"></div>
+    </div>
+    <div class="section card">
+      <div class="card-title">2.2 数据架构</div>
+      <div class="card-sub">分层建模链路：ODS → DWD / DIM → DWS → ADS</div>
+      <div id="dataFlow"></div>
+    </div>
+  </div>
+
+  <!-- ====== 3. 建设规范 ====== -->
+  <div id="pane-build" class="hidden">
+    <div class="section card">
+      <div class="card-title">3.1 模型建设规范</div>
+      <p class="prose" id="buildModelSpec"></p>
+    </div>
+    <div class="section card">
+      <div class="card-title">3.2 开发规范</div>
       <table class="detail">
-        <thead>
-          <tr><th>分层</th><th>数据域</th><th>英文表名</th><th>中文名称</th><th>任务类型</th></tr>
-        </thead>
-        <tbody id="detailBody"></tbody>
+        <thead><tr><th style="width:220px">规范项</th><th>内容</th></tr></thead>
+        <tbody id="devSpecBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 4. 总线矩阵 ====== -->
+  <div id="pane-busmatrix" class="hidden">
+    <div class="section card">
+      <div class="card-title">4.1 总线矩阵</div>
+      <div class="card-sub">业务过程 × 一致性维度</div>
+      <div id="busMatrixWrap"></div>
+    </div>
+  </div>
+
+  <!-- ====== 5. 模型设计清单 ====== -->
+  <div id="pane-model" class="hidden">
+    <div class="section card">
+      <table class="detail">
+        <thead><tr><th style="width:84px">分层</th><th style="width:120px">数据域</th><th>英文表名</th><th>中文名称</th><th style="width:110px">任务类型</th></tr></thead>
+        <tbody id="modelBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 6. 数据域 ====== -->
+  <div id="pane-domain" class="hidden">
+    <div class="section card">
+      <table class="detail">
+        <thead><tr><th style="width:140px">数据域</th><th style="width:130px">英文标识</th><th>定义</th><th style="width:90px">表数量</th></tr></thead>
+        <tbody id="domainBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 7. 数据标准 ====== -->
+  <div id="pane-standard" class="hidden">
+    <div class="section card">
+      <table class="detail">
+        <thead><tr><th style="width:200px">标准名称</th><th style="width:110px">类型</th><th style="width:220px">值域 / 格式</th><th>说明</th></tr></thead>
+        <tbody id="standardBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 8. 指标建设 ====== -->
+  <div id="pane-metric" class="hidden">
+    <div class="section card">
+      <table class="detail">
+        <thead><tr><th style="width:180px">指标名称</th><th style="width:90px">类型</th><th style="width:110px">统计粒度</th><th>计算口径</th></tr></thead>
+        <tbody id="metricBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== 9. 系统接入 ====== -->
+  <div id="pane-system" class="hidden">
+    <div class="section card">
+      <div class="card-title">系统接入清单</div>
+      <div class="card-sub">源系统对接情况：接入时间 / 类型 / 数据方向 / 同步方式</div>
+      <table class="detail">
+        <thead><tr><th style="width:200px">系统名称</th><th style="width:140px">系统类型</th><th>描述</th><th style="width:110px">数据方向</th><th style="width:120px">同步方式</th></tr></thead>
+        <tbody id="systemBody"></tbody>
       </table>
     </div>
   </div>
@@ -322,33 +365,74 @@ const DATA = {
     tags: ['行业: 交通运输仓储邮政 - 管道运输', '客户：国家管网集团', '数据模式：实时'],
     stats: [
       { num: '50', label: '数仓表总数' },
-      { num: '5', label: '分层覆盖', small: '/ 5' },
       { num: '9', label: '数据域' },
-      { num: '45', label: '沉淀词根' },
-      { num: '92', label: '命名合规率', small: '%' },
+      { num: '12', label: '数据标准' },
+      { num: '18', label: '指标定义' },
+      { num: '4', label: '系统接入' },
     ],
-    narrative: '本项目服务于<b>能源管网行业</b>的计量诊断业务，面向国家管网集团的计量交接与损耗治理场景。数仓采用 <b>ODS → DWD → DWS → DIM → ADS 五层标准架构</b>，覆盖<b>计量、客户、结算</b>等 9 大数据域，共交付 <span class="hl">50 张模型表</span>；其中 <span class="hl">6 张 ADS 应用表</span>直接支撑计量异常诊断、日度输差分析等一线业务场景。命名合规率 <b>92%</b>，沉淀可复用词根 <b>45 个</b>，其中 12 个已在其他项目验证通用。',
-    radar: { 规模: 85, 架构: 90, 覆盖: 78, 标准化: 92, 应用化: 70 },
-    domains: ['计量域', '客户域', '设备域', '结算域', '工单域', '运行域', '安全域', '组织域', '公共域'],
-    /* 行=域，列=[ODS,DWD,DWS,DIM,ADS] */
-    matrix: [
-      [6, 4, 1, 0, 1], [4, 2, 1, 1, 0], [3, 2, 1, 1, 0],
-      [3, 2, 1, 0, 0], [2, 2, 1, 0, 0], [3, 1, 1, 0, 1],
-      [2, 1, 0, 0, 1], [1, 1, 0, 1, 0], [2, 2, 1, 1, 3],
+    overview: {
+      background: '国家管网集团承担全国油气干线管网的计量交接职责，计量数据分散在 SCADA、计量管理系统等多套系统中，输差异常发现依赖人工巡检，诊断周期长达 3 天以上，难以满足精准交接与损耗考核要求。',
+      requirements: '建设统一的计量数据仓库，实现计量读数、设备台账、结算数据的集中汇聚；建立计量异常自动诊断能力，支撑日度输差分析；沉淀可复用的计量域模型与指标口径。',
+      value: '计量异常诊断时效从 3 天缩短至 2 小时；月度输差率下降 0.4 个百分点；为 2.3 万台计量设备建立健康度分级；沉淀 45 个命名词根与 12 项跨项目可复用资产。',
+    },
+    techFlow: [
+      ['源系统', ['SCADA 采集系统', '计量管理系统', 'ERP 结算系统', 'GIS 管网系统']],
+      ['数据采集', ['Flink CDC 实时同步', 'DataX 离线同步']],
+      ['计算存储', ['Dataphin 数据研发平台', 'MaxCompute']],
+      ['数据服务', ['OneService 数据服务', 'Quick BI 报表']],
     ],
-    roots: [
-      ['diag', '诊断'], ['cust', '客户'], ['mtr', '计量表'], ['amt', '金额'],
-      ['bal', '平衡/输差'], ['setl', '结算'], ['dev', '设备'], ['ord', '工单'],
-      ['sum', '汇总'], ['df', '日全量'], ['his', '历史'], ['stat', '统计'],
+    dataFlow: [
+      ['ODS 贴源层', ['l-ods', '计量读数', '客户信息', '结算账单', '设备台账']],
+      ['DWD 明细层', ['l-dwd', '计量诊断明细', '结算账单明细']],
+      ['DIM 维表层', ['l-dim', '日期维表', '计量设备维表']],
+      ['DWS 汇总层', ['l-dws', '诊断统计日汇总']],
+      ['ADS 应用层', ['l-ads', '诊断汇总', '输差分析', '表具健康度']],
     ],
-    compliance: [
-      ['分层前缀规范', 98], ['小写下划线格式', 100], ['词根命中率', 88],
-      ['业务过程后缀（df/inc）', 94], ['跨项目词根复用', 27, true],
+    buildModelSpec: '采用 ODS → DWD → DWS → DIM → ADS 五层架构。ODS 保持源系统原貌不做加工；DWD 按业务过程构建明细事实表；DIM 统一管理一致性维度；DWS 面向分析主题做轻度汇总；ADS 直接对接应用场景。一事实一表、一维度一表，禁止跨域混合建模。',
+    devSpec: [
+      ['命名规范', '分层前缀 + 数据域缩写 + 业务描述 + 周期后缀（df 日全量 / inc 增量），全小写下划线'],
+      ['调度规范', '日任务 02:00 后启动，跨层任务严格依赖上游产出，失败自动告警'],
+      ['脚本规范', 'SQL 关键字大写、字段逐行对齐、注释说明业务口径，单脚本不超过 300 行'],
+      ['发布规范', '开发环境验证 → 冒烟测试 → 生产发布，变更需评审记录'],
     ],
-    scenes: [
-      ['ads_diagnosis_summary_df', '<b>计量异常诊断日报</b>：每日自动定位输差超阈值站点，诊断时效从 3 天缩短至 2 小时'],
-      ['ads_bal_analysis_df', '<b>日度输差分析</b>：支撑购销差考核，月度输差率下降 0.4 个百分点'],
-      ['ads_mtr_health_df', '<b>计量表健康度画像</b>：为 2.3 万台计量设备建立运行状态分级'],
+    bus: {
+      dims: ['日期', '客户', '计量设备', '站点', '组织'],
+      rows: [
+        ['计量读数', [1, 1, 1, 1, 1]],
+        ['计量诊断', [1, 0, 1, 1, 1]],
+        ['结算出账', [1, 1, 0, 1, 1]],
+        ['设备巡检', [1, 0, 1, 1, 1]],
+      ],
+    },
+    domains: [
+      ['计量域', 'mtr', '计量读数、诊断与平衡分析', 12],
+      ['客户域', 'cust', '客户主数据与合同信息', 7],
+      ['设备域', 'dev', '计量设备台账与健康度', 7],
+      ['结算域', 'setl', '结算账单与对账', 6],
+      ['工单域', 'ord', '巡检与处置工单', 5],
+      ['运行域', 'ops', '管网运行与输差监控', 6],
+      ['安全域', 'safe', '安全事件与隐患', 3],
+      ['组织域', 'org', '组织架构与人员', 2],
+      ['公共域', 'pub', '日期等通用维度', 2],
+    ],
+    standards: [
+      ['表命名规范', '命名标准', '{层}_{域}_{业务}_{周期}', '示例：dwd_mtr_diag_detail_df'],
+      ['气质组分阈值', '字段标准', '甲烷 ≥ 90%，氮气 ≤ 3%', '超限触发告警，引用 GB 17820'],
+      ['计量表类型代码', '代码标准', '1 涡轮 / 2 超声波 / 3 孔板', '统一各源系统类型字典'],
+      ['输差率状态', '代码标准', '0 正常 / 1 预警 / 2 超阈值', '日度判定结果枚举'],
+    ],
+    metrics: [
+      ['日输气量', '原子指标', '日 × 站点', 'SUM(当日计量读数差值)'],
+      ['日输差率', '原子指标', '日 × 站点', '(输入量 - 输出量) / 输入量'],
+      ['月度输差率', '派生指标', '月 × 站点', '日输差率按月汇总加权'],
+      ['诊断响应时长', '派生指标', '日 × 事件', 'AVG(处置时间 - 告警时间)'],
+      ['设备健康度', '派生指标', '日 × 设备', '多因子评分模型综合得分'],
+    ],
+    systems: [
+      ['SCADA 采集系统', '采集系统', '计量读数、运行参数实时采集', '入', 'Flink CDC 实时同步'],
+      ['计量管理系统', '业务系统', '计量交接、输差考核信息', '出', 'DataX 离线同步'],
+      ['ERP 结算系统', '业务系统', '结算账单、对账信息', '出', 'DataX 离线同步'],
+      ['GIS 管网系统', '业务系统', '管网拓扑、站点台账', '入', 'DataX 离线同步'],
     ],
     tables: [
       ['ODS', '计量域', 'ods_mtr_reading_df', '计量表读数日全量', 'SQL'],
@@ -368,30 +452,70 @@ const DATA = {
     tags: ['行业: 电热燃气水生产供应 - 燃气生产和供应', '客户：某省级燃气集团', '数据模式：离线、实时'],
     stats: [
       { num: '32', label: '数仓表总数' },
-      { num: '5', label: '分层覆盖', small: '/ 5' },
       { num: '6', label: '数据域' },
-      { num: '28', label: '沉淀词根' },
-      { num: '87', label: '命名合规率', small: '%' },
+      { num: '8', label: '数据标准' },
+      { num: '13', label: '指标定义' },
+      { num: '3', label: '系统接入' },
     ],
-    narrative: '本项目服务于<b>公用事业行业</b>的供销差治理业务，面向城市燃气企业的购、销、存全链路损耗管控。数仓采用<b>五层标准架构</b>，覆盖<b>购销、计量、客户</b>等 6 大数据域，共交付 <span class="hl">32 张模型表</span>；其中 <span class="hl">4 张 ADS 应用表</span>直接支撑供销差归因与抄表质量管理。复用上一项目词根 <b>12 个</b>，建模启动时间缩短约一半。',
-    radar: { 规模: 55, 架构: 88, 覆盖: 62, 标准化: 87, 应用化: 72 },
-    domains: ['购销域', '计量域', '客户域', '设备域', '安全域', '公共域'],
-    matrix: [
-      [5, 3, 1, 0, 1], [4, 2, 1, 0, 1], [3, 2, 1, 0, 0],
-      [2, 2, 0, 1, 0], [2, 1, 0, 0, 1], [2, 1, 1, 1, 1],
+    overview: {
+      background: '城市燃气企业购、销、存全链路存在系统性损耗，供销差率长期高于行业基准，但损耗来源（抄表误差、管网泄漏、温压修正）无法量化归因，治理缺少数据抓手。',
+      requirements: '打通营销、计量、采购三套系统数据，构建购销存一体化数仓；建立片区级供销差归因能力；监控抄表质量，识别估抄、漏抄行为。',
+      value: '供销差定位周期从 2 周降至 2 天；估抄率下降 60%；购销存日报替代人工台账，每日节省统计工时约 3 人时；复用能源管网项目 12 项资产，建模启动时间缩短约一半。',
+    },
+    techFlow: [
+      ['源系统', ['营销系统', 'SCADA 计量系统', '采购合同系统']],
+      ['数据采集', ['DataX 离线同步', 'Kafka 实时接入']],
+      ['计算存储', ['DTStack 数栈', 'Hive 数仓']],
+      ['数据服务', ['数据服务 API', '报表大屏']],
     ],
-    roots: [
-      ['pur', '采购'], ['sale', '销售'], ['inv', '库存'], ['cust', '客户'],
-      ['mtr', '计量表'], ['bal', '平衡/输差'], ['df', '日全量'], ['stat', '统计'],
+    dataFlow: [
+      ['ODS 贴源层', ['l-ods', '采购合同', '表具读数', '销售订单']],
+      ['DWD 明细层', ['l-dwd', '销售订单明细']],
+      ['DIM 维表层', ['l-dim', '燃气客户维表']],
+      ['DWS 汇总层', ['l-dws', '输差统计日汇总']],
+      ['ADS 应用层', ['l-ads', '供销差归因', '抄表质量', '购销存日报']],
     ],
-    compliance: [
-      ['分层前缀规范', 95], ['小写下划线格式', 100], ['词根命中率', 82],
-      ['业务过程后缀（df/inc）', 90], ['跨项目词根复用', 43, true],
+    buildModelSpec: '沿用五层标准架构，重点建设购销域。片区作为虚拟维度挂在客户维表下，支撑供销差按片区归因。实时链路与离线链路在 DWS 层合并，保证口径一致。',
+    devSpec: [
+      ['命名规范', '沿用能源管网项目词根库，新增 pur / sale / inv 三个购销存词根'],
+      ['调度规范', '离线任务 T+1 06:00 前产出，实时任务独立监控'],
+      ['口径规范', '供销差相关指标统一在 DWS 层计算，ADS 层禁止重复加工'],
+      ['发布规范', '开发环境验证 → 冒烟测试 → 生产发布，变更需评审记录'],
     ],
-    scenes: [
-      ['ads_bal_reason_df', '<b>供销差归因分析</b>：将月度输差拆解到片区与原因类别，定位周期从 2 周降至 2 天'],
-      ['ads_meter_read_quality_df', '<b>抄表质量监控</b>：识别异常抄表行为，估抄率下降 60%'],
-      ['ads_pur_sale_report_df', '<b>购销存日报</b>：替代人工台账，每日节省统计工时约 3 人时'],
+    bus: {
+      dims: ['日期', '客户', '片区', '表具', '合同'],
+      rows: [
+        ['采购入库', [1, 0, 0, 0, 1]],
+        ['销售开单', [1, 1, 1, 0, 1]],
+        ['抄表采集', [1, 1, 1, 1, 0]],
+        ['供销差核算', [1, 0, 1, 0, 0]],
+      ],
+    },
+    domains: [
+      ['购销域', 'pur_sale', '采购、销售与库存全链路', 11],
+      ['计量域', 'mtr', '表具读数与抄表数据', 8],
+      ['客户域', 'cust', '燃气客户与片区', 5],
+      ['设备域', 'dev', '表具台账', 4],
+      ['安全域', 'safe', '用气安全事件', 2],
+      ['公共域', 'pub', '日期等通用维度', 2],
+    ],
+    standards: [
+      ['表命名规范', '命名标准', '{层}_{域}_{业务}_{周期}', '沿用集团统一规范'],
+      ['片区编码', '字段标准', '6 位行政区 + 2 位序号', '片区归属唯一判定依据'],
+      ['抄表方式代码', '代码标准', '1 实抄 / 2 估抄 / 3 远传', '抄表质量监控基础'],
+      ['供销差等级', '代码标准', 'A 优 / B 良 / C 预警 / D 超标', '片区月度评级'],
+    ],
+    metrics: [
+      ['月购气量', '原子指标', '月 × 公司', 'SUM(采购入库量)'],
+      ['月销气量', '原子指标', '月 × 公司', 'SUM(销售开单量)'],
+      ['供销差率', '派生指标', '月 × 片区', '(购气量 - 销气量) / 购气量'],
+      ['估抄率', '派生指标', '月 × 片区', '估抄户数 / 应抄户数'],
+      ['日均存量', '派生指标', '日 × 门站', 'AVG(当日库存快照)'],
+    ],
+    systems: [
+      ['营销系统', '业务系统', '客户信息、销售订单、缴费记录', '出', 'DataX 离线同步'],
+      ['SCADA 计量系统', '采集系统', '表具读数、运行参数实时监测', '入 + 出', 'Kafka 实时接入'],
+      ['采购合同系统', '业务系统', '采购合同、入库信息', '入', 'DataX 离线同步'],
     ],
     tables: [
       ['ODS', '购销域', 'ods_pur_contract_df', '采购合同日全量', 'SQL'],
@@ -407,15 +531,9 @@ const DATA = {
 };
 
 /* ---------------- 渲染 ---------------- */
-const RADAR_DIMS = ['规模', '架构', '覆盖', '标准化', '应用化'];
-function radarPoint(idx, score) {
-  const r = score * 0.8; // 满分100 -> 半径80
-  const ang = (-90 + idx * 72) * Math.PI / 180;
-  return [100 + r * Math.cos(ang), 100 + r * Math.sin(ang)];
-}
-
 function render(projKey) {
   const d = DATA[projKey];
+
   document.getElementById('projTags').innerHTML =
     d.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
@@ -425,60 +543,69 @@ function render(projKey) {
       <div class="stat-label">${s.label}</div>
     </div>`).join('');
 
-  document.getElementById('narrative').innerHTML = d.narrative;
+  /* 1. 项目全景 */
+  document.getElementById('ovBackground').textContent = d.overview.background;
+  document.getElementById('ovRequirements').textContent = d.overview.requirements;
+  document.getElementById('ovValue').textContent = d.overview.value;
 
-  /* 雷达 */
-  const pts = RADAR_DIMS.map((k, i) => radarPoint(i, d.radar[k]).map(v => v.toFixed(1)).join(','));
-  document.getElementById('radarPoly').setAttribute('points', pts.join(' '));
-  document.getElementById('radarLegend').innerHTML = RADAR_DIMS.map(k => `
-    <div class="legend-item"><span class="legend-dot"></span>${k}<span class="v">${d.radar[k]}</span></div>`).join('');
+  /* 2. 架构设计（流程图） */
+  function flowHtml(rows) {
+    return rows.map(([label, items]) => `
+      <div class="flow">
+        <div class="flow-label">${label}</div>
+        <div class="flow-row">${items.map(it =>
+          typeof it === 'string'
+            ? `<div class="flow-node">${it}</div>`
+            : `<div class="flow-node ${it[0]}">${it[1]}</div>`
+        ).join('<div class="flow-arrow">→</div>')}</div>
+      </div>`).join('');
+  }
+  document.getElementById('techFlow').innerHTML = flowHtml(d.techFlow);
+  document.getElementById('dataFlow').innerHTML = flowHtml(d.dataFlow);
 
-  /* 热力矩阵 */
-  const LAYERS = ['ODS', 'DWD', 'DWS', 'DIM', 'ADS'];
-  let mx = '<div class="mx-head" style="text-align:left"></div>' +
-    LAYERS.map(l => `<div class="mx-head">${l}</div>`).join('') + '<div></div>';
-  d.domains.forEach((dom, i) => {
-    const row = d.matrix[i];
-    const total = row.reduce((a, b) => a + b, 0);
-    mx += `<div class="mx-domain">${dom}</div>`;
-    row.forEach(n => {
-      const cls = n === 0 ? 'empty' : 't' + Math.min(5, n);
-      mx += `<div class="mx-cell ${cls}">${n || '·'}</div>`;
-    });
-    mx += `<div class="mx-total">${total}</div>`;
-  });
-  const colTotals = LAYERS.map((_, c) => d.matrix.reduce((a, r) => a + r[c], 0));
-  mx += '<div class="mx-head" style="text-align:left">合计</div>' +
-    colTotals.map(n => `<div class="mx-head">${n}</div>`).join('') +
-    `<div class="mx-total" style="font-weight:600">${colTotals.reduce((a, b) => a + b, 0)}</div>`;
-  document.getElementById('matrix').innerHTML = mx;
+  /* 3. 建设规范 */
+  document.getElementById('buildModelSpec').textContent = d.buildModelSpec;
+  document.getElementById('devSpecBody').innerHTML = d.devSpec.map(([k, v]) =>
+    `<tr><td style="font-weight:600;color:#141413">${k}</td><td>${v}</td></tr>`).join('');
+  document.getElementById('busMatrixWrap').innerHTML = `
+    <table class="detail">
+      <thead><tr><th style="width:180px">业务过程</th>${d.bus.dims.map(x => `<th style="text-align:center">${x}</th>`).join('')}</tr></thead>
+      <tbody>${d.bus.rows.map(([proc, marks]) => `
+        <tr><td style="font-weight:500">${proc}</td>${marks.map(m =>
+          `<td style="text-align:center">${m ? '<span class="dot-yes"></span>' : ''}</td>`).join('')}</tr>`).join('')}
+      </tbody>
+    </table>`;
 
-  /* 词根 */
-  document.getElementById('roots').innerHTML = d.roots.map(([r, m]) => {
-    const shared = ['cust', 'mtr', 'bal', 'df', 'stat'].includes(r) && projKey === 'gas';
-    return `<span class="root-chip ${shared ? 'shared' : ''}"><span class="r mono">${r}</span><span class="m">${m}</span></span>`;
-  }).join('');
-
-  /* 合规 */
-  document.getElementById('compliance').innerHTML = d.compliance.map(([name, v, warn]) => `
-    <div class="c-item">
-      <span class="c-name">${name}</span>
-      <div class="c-bar"><div class="c-fill ${v < 50 ? 'warn' : ''}" style="width:${v}%"></div></div>
-      <span class="c-val">${v}%</span>
-    </div>`).join('');
-
-  /* 场景 */
-  document.getElementById('scenes').innerHTML = d.scenes.map(([t, desc]) => `
-    <div class="scene-item">
-      <span class="scene-table mono">${t}</span>
-      <span class="scene-desc">${desc}</span>
-    </div>`).join('');
-
-  /* 明细表 */
-  document.getElementById('detailBody').innerHTML = d.tables.map(r => `
+  /* 5. 模型设计清单 */
+  document.getElementById('modelBody').innerHTML = d.tables.map(r => `
     <tr>
       <td><span class="badge badge-${r[0]}">${r[0]}</span></td>
       <td>${r[1]}</td><td class="mono">${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td>
+    </tr>`).join('');
+
+  /* 5. 数据域 */
+  document.getElementById('domainBody').innerHTML = d.domains.map(([name, code, def, n]) => `
+    <tr><td style="font-weight:600;color:#141413">${name}</td><td class="mono">${code}</td><td>${def}</td><td>${n}</td></tr>`).join('');
+
+  /* 6. 数据标准 */
+  document.getElementById('standardBody').innerHTML = d.standards.map(([name, type, range, desc]) => `
+    <tr><td style="font-weight:500">${name}</td><td>${type}</td><td class="mono" style="font-size:12px">${range}</td><td>${desc}</td></tr>`).join('');
+
+  /* 7. 指标建设 */
+  document.getElementById('metricBody').innerHTML = d.metrics.map(([name, type, grain, formula]) => `
+    <tr>
+      <td style="font-weight:500">${name}</td>
+      <td><span class="badge badge-${type === '原子指标' ? 'atom' : 'derive'}">${type}</span></td>
+      <td>${grain}</td><td class="mono" style="font-size:12px">${formula}</td>
+    </tr>`).join('');
+
+  /* 8. 系统接入 */
+  document.getElementById('systemBody').innerHTML = d.systems.map(([name, type, desc, dir, sync]) => `
+    <tr>
+      <td style="font-weight:500">${name}</td>
+      <td>${type}</td><td>${desc}</td>
+      <td><span class="badge badge-${dir === '入' ? 'DWD' : dir === '出' ? 'ADS' : 'atom'}">${dir}</span></td>
+      <td class="mono" style="font-size:12px">${sync}</td>
     </tr>`).join('');
 }
 
@@ -515,14 +642,14 @@ const LATEST_PROJ = 'gas';
 const queryProj = new URLSearchParams(location.search).get('proj');
 selectProj(DATA[queryProj] ? queryProj : LATEST_PROJ);
 
-/* Tab 切换 */
+/* Tab 切换（九大分页） */
 document.querySelector('.tabs').addEventListener('click', e => {
   const tab = e.target.closest('.tab');
   if (!tab) return;
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
   tab.classList.add('active');
-  document.getElementById('pane-archive').classList.toggle('hidden', tab.dataset.tab !== 'archive');
-  document.getElementById('pane-detail').classList.toggle('hidden', tab.dataset.tab !== 'detail');
+  document.querySelectorAll('[id^="pane-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('pane-' + tab.dataset.tab).classList.remove('hidden');
 });
 
 /* ---------------- 顶栏交互 ---------------- */
