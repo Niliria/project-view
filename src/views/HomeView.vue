@@ -34,6 +34,11 @@ function showToast(msg) {
   toastTimer = setTimeout(() => toast.value?.classList.remove('show'), 2200)
 }
 function enterModule(name) {
+  /* 交付项目 - 跳转到 prototype/project.html */
+  if (name === '交付项目') {
+    window.location.href = '/prototype/project.html';
+    return;
+  }
   showToast(`进入「${name}」模块明细 —— 功能开发中`)
 }
 function plannedCategory(e, name) {
