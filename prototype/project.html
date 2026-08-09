@@ -49,20 +49,44 @@
   /* ---------- 主体 ---------- */
   .page { max-width: 1160px; margin: 0 auto; padding: 36px 40px 80px; }
 
-  /* 项目切换 */
-  .proj-switch { display: inline-flex; gap: 4px; padding: 4px; background: #fafafa; border: 1px solid #e9e9e7; border-radius: 12px; }
-  .proj-item {
-    padding: 7px 16px; font-size: 13.5px; color: #5e5d59; border-radius: 9px; cursor: pointer; user-select: none;
+  /* 项目选择：下拉框 */
+  .proj-picker { display: flex; align-items: center; gap: 12px; }
+  .picker-label { font-size: 16px; color: #141413; font-weight: 500; white-space: nowrap; flex: none; }
+  .picker { position: relative; }
+  .picker-btn {
+    display: flex; align-items: center; gap: 10px;
+    min-width: 400px; max-width: 400px; height: 42px; padding: 0 16px;
+    background: #ffffff; border: 1px solid #e4e4e2; border-radius: 12px;
+    font-size: 14px; color: #141413; cursor: pointer; user-select: none;
+    transition: border-color .15s;
   }
-  .proj-item.active { background: #ffffff; color: #141413; font-weight: 600; border: 1px solid #e9e9e7; }
+  .picker-btn:hover { border-color: #c9c8c3; }
+  .picker.open .picker-btn { border-color: #409EFF; }
+  .picker-value { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .picker-caret { width: 13px; height: 13px; color: #9b9a94; flex: none; transition: transform .2s ease; }
+  .picker.open .picker-caret { transform: rotate(180deg); }
+  .picker-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 30;
+    background: #ffffff; border: 1px solid #e9e9e7; border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(20,20,19,0.08);
+    padding: 5px;
+    opacity: 0; transform: translateY(-4px); pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .picker.open .picker-menu { opacity: 1; transform: none; pointer-events: auto; }
+  .picker-option {
+    display: flex; align-items: center;
+    padding: 9px 12px; font-size: 13.5px; color: #3b3a37; border-radius: 8px; cursor: pointer;
+  }
+  .picker-option:hover { background: #fafafa; }
+  .picker-option.selected { color: #141413; font-weight: 600; }
+  .picker-option.selected::after { content: "✓"; margin-left: auto; font-size: 12px; color: #141413; }
 
-  /* 档案头 */
-  .archive-head { margin-top: 26px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-  .proj-name { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
-  .proj-tags { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  /* 档案头：标签与下拉框同行，自适应换行 */
+  .proj-tags { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
   .tag {
     font-size: 12.5px; color: #5e5d59; background: #fafafa;
-    border: 1px solid #e9e9e7; border-radius: 999px; padding: 4px 12px;
+    border: 1px solid #e9e9e7; border-radius: 999px; padding: 4px 12px; white-space: nowrap;
   }
 
   /* 统计卡 */
@@ -175,18 +199,20 @@
 
 <main class="page">
 
-  <!-- 项目切换 -->
-  <div class="proj-switch" id="projSwitch">
-    <div class="proj-item active" data-proj="pipe">国家管网计量诊断项目</div>
-    <div class="proj-item" data-proj="gas">城市燃气供销差治理项目</div>
-  </div>
-
-  <!-- 档案头 -->
-  <div class="archive-head">
-    <div>
-      <h1 class="proj-name serif" id="projName">国家管网计量诊断项目</h1>
-      <div class="proj-tags" id="projTags"></div>
+  <!-- 项目选择 -->
+  <div class="proj-picker">
+    <span class="picker-label">项目名称</span>
+    <div class="picker" id="projPicker">
+      <div class="picker-btn" id="pickerBtn">
+        <span class="picker-value" id="pickerValue">城市燃气供销差治理项目</span>
+        <svg class="picker-caret" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="picker-menu" id="pickerMenu">
+        <div class="picker-option" data-proj="pipe">国家管网计量诊断项目</div>
+        <div class="picker-option selected" data-proj="gas">城市燃气供销差治理项目</div>
+      </div>
     </div>
+    <div class="proj-tags" id="projTags"></div>
   </div>
 
   <!-- 统计卡 -->
@@ -293,7 +319,7 @@
 const DATA = {
   pipe: {
     name: '国家管网计量诊断项目',
-    tags: ['能源 · 油气管网', '客户：国家管网集团', '平台：Dataphin', '交付周期：8 个月'],
+    tags: ['行业: 交通运输仓储邮政 - 管道运输', '客户：国家管网集团', '开发平台：Dataphin'],
     stats: [
       { num: '50', label: '数仓表总数' },
       { num: '5', label: '分层覆盖', small: '/ 5' },
@@ -339,7 +365,7 @@ const DATA = {
   },
   gas: {
     name: '城市燃气供销差治理项目',
-    tags: ['公用事业 · 城市燃气', '客户：某省级燃气集团', '平台：DTStack', '交付周期：5 个月'],
+    tags: ['行业: 电热燃气水生产供应 - 燃气生产和供应', '客户：某省级燃气集团', '开发平台：DTStack'],
     stats: [
       { num: '32', label: '数仓表总数' },
       { num: '5', label: '分层覆盖', small: '/ 5' },
@@ -390,7 +416,6 @@ function radarPoint(idx, score) {
 
 function render(projKey) {
   const d = DATA[projKey];
-  document.getElementById('projName').textContent = d.name;
   document.getElementById('projTags').innerHTML =
     d.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
@@ -457,14 +482,38 @@ function render(projKey) {
     </tr>`).join('');
 }
 
-/* 项目切换 */
-document.getElementById('projSwitch').addEventListener('click', e => {
-  const item = e.target.closest('.proj-item');
-  if (!item) return;
-  document.querySelectorAll('.proj-item').forEach(el => el.classList.remove('active'));
-  item.classList.add('active');
-  render(item.dataset.proj);
+/* 项目下拉选择（单选） */
+const picker = document.getElementById('projPicker');
+const pickerBtn = document.getElementById('pickerBtn');
+const pickerMenu = document.getElementById('pickerMenu');
+const pickerValue = document.getElementById('pickerValue');
+
+/* 选中某个项目：同步下拉框 + 渲染全页 */
+function selectProj(key) {
+  pickerMenu.querySelectorAll('.picker-option').forEach(el => {
+    el.classList.toggle('selected', el.dataset.proj === key);
+  });
+  pickerValue.textContent = DATA[key].name;
+  render(key);
+}
+
+pickerBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  picker.classList.toggle('open');
 });
+pickerMenu.addEventListener('click', e => {
+  const opt = e.target.closest('.picker-option');
+  if (!opt) return;
+  selectProj(opt.dataset.proj);
+  picker.classList.remove('open');
+});
+document.addEventListener('click', () => picker.classList.remove('open'));
+
+/* 首页联动入口：默认展示最新项目；支持 ?proj=xxx 指定进入
+   正式版：按项目创建时间倒序取第一条作为默认 */
+const LATEST_PROJ = 'gas';
+const queryProj = new URLSearchParams(location.search).get('proj');
+selectProj(DATA[queryProj] ? queryProj : LATEST_PROJ);
 
 /* Tab 切换 */
 document.querySelector('.tabs').addEventListener('click', e => {
@@ -475,8 +524,6 @@ document.querySelector('.tabs').addEventListener('click', e => {
   document.getElementById('pane-archive').classList.toggle('hidden', tab.dataset.tab !== 'archive');
   document.getElementById('pane-detail').classList.toggle('hidden', tab.dataset.tab !== 'detail');
 });
-
-render('pipe');
 
 /* ---------------- 顶栏交互 ---------------- */
 const toastEl = document.getElementById('toast');
