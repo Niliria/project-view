@@ -405,7 +405,7 @@ document.querySelectorAll('.stat-card, .layer-row, .ind-card').forEach(el => {
   el.addEventListener('click', () => {
     /* 首页联动：交付项目卡片 → 项目模块页（默认展示最新项目） */
     if (el.dataset.module === '交付项目') {
-      location.href = 'project.html';
+      location.href = './project.html';
       return;
     }
     showToast(`进入「${el.dataset.module}」模块明细 —— 该页面为下一张原型`);
